@@ -43,6 +43,24 @@ console.log("User authenticated successfully!");
 
 ## 📁 File Operations
 
+### 📌 List All Files in a Folder
+
+Retrieve a list of files inside a folder.
+
+```js
+const files = await drive.readFolder("FOLDER_ID");
+
+console.log(files);
+```
+
+Each file in the array contains:
+```json
+[
+  { "id": "FILE_ID", "name": "example.json" },
+  { "id": "FILE_ID", "name": "notes.txt" }
+]
+```
+
 ### 📌 Create a JSON File
 
 Save a JavaScript object as a JSON file inside a Google Drive folder.
@@ -97,21 +115,14 @@ Move a file from one folder to another.
 await drive.moveFile("SOURCE_FOLDER_ID", "notes.txt", "DESTINATION_FOLDER_ID");
 ```
 
-### 📌 List All Files in a Folder
+### 📌 Delete Files
 
-Retrieve a list of files inside a folder.
+Delete.
 
 ```js
-const files = await drive.readFolder("FOLDER_ID");
-console.log(files);
-```
+await drive.deleteFile("SOURCE_FOLDER_ID", "notes.txt");
 
-Each file in the array contains:
-```json
-[
-  { "id": "FILE_ID", "name": "example.json" },
-  { "id": "FILE_ID", "name": "notes.txt" }
-]
+await drive.deleteFileId("FILE_ID");
 ```
 
 

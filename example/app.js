@@ -1,9 +1,11 @@
-import { CLIENT_ID, FOLDER_ID } from './config.js';
+import { CLIENT_ID, FOLDER_ID, DESTINATION_FOLDER_ID } from './config.js';
 import drive from '../src/drive.js';
 
 
 // Initialize Google Drive Utils
 drive.init(CLIENT_ID);
+
+let createdFileDetails; 
 
 document.getElementById("authButton").addEventListener("click", async () => {
     try {
@@ -14,16 +16,64 @@ document.getElementById("authButton").addEventListener("click", async () => {
     }
 });
 
-document.getElementById("createFile").addEventListener("click", async () => {
+document.getElementById("deleteFile").addEventListener("click", async () => {
     try {
-        await drive.createJsonFile(FOLDER_ID, "example.json", { message: "Hello, world!" });
+        await drive.deleteFile(FOLDER_ID, "example.json");
+        log("File deleted successfully!");
+    } catch (error) {
+        log("Error deleting JSON file: " + error);
+    }
+});
+
+document.getElementById("deleteFileId").addEventListener("click", async () => {
+    try {
+        await drive.deleteFileId(deleteFile.Id);
+        log("File deleted (byId) successfully!");
+    } catch (error) {
+        log("Error deleting JSON file: " + error);
+    }
+});
+
+
+document.getElementById("createPlainFile").addEventListener("click", async () => {
+    try {
+        await drive.createFile(FOLDER_ID, "notes.txt", "Hello, Google Drive!");
+        log("Plain file created successfully!");
+    } catch (error) {
+        log("Error creating plain file: " + error);
+    }
+});
+
+document.getElementById("readFile").addEventListener("click", async () => {
+    try {
+        const content = await drive.readFile(FOLDER_ID, "notes.txt");
+        log(`File content:\r${content}`);
+    } catch (error) {
+        log("Error reading plain file: " + error);
+    }
+});
+
+
+document.getElementById("movePlainFile").addEventListener("click", async () => {
+    try {
+        await drive.moveFile(FOLDER_ID, "notes.txt", DESTINATION_FOLDER_ID);
+        log(`File notes.txt moved to another folder`);
+    } catch (error) {
+        log("Error reading plain file: " + error);
+    }
+});
+
+
+document.getElementById("createJsonFile").addEventListener("click", async () => {
+    try {
+        createdFileDetails = await drive.createJsonFile(FOLDER_ID, "example.json", { message: "Hello, world!" });
         log("JSON file created successfully!");
     } catch (error) {
         log("Error creating JSON file: " + error);
     }
 });
 
-document.getElementById("readFile").addEventListener("click", async () => {
+document.getElementById("readJsonFile").addEventListener("click", async () => {
     try {
         const content = await drive.readJsonFile(FOLDER_ID, "example.json");
         log("Read JSON file: " + JSON.stringify(content, null, 2));

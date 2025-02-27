@@ -20,7 +20,7 @@ class GoogleDrive {
             scope: 'https://www.googleapis.com/auth/drive.file',
             callback: (tokenResponse) => {
                 this.accessToken = tokenResponse.access_token;
-                console.log("Authenticated successfully!");
+                console.log("Google Accounts Authenticated successfully!");
             }
         });
     }
@@ -39,9 +39,10 @@ class GoogleDrive {
                     this.gisLoaded = true;
                     resolve();
                 } else {
-                    setTimeout(checkGoogleAPI, 100);
+                    setTimeout(checkGoogleAPI, 5000);
                 }
             };
+
             checkGoogleAPI();
         });
     }
@@ -51,10 +52,13 @@ class GoogleDrive {
      */
     authenticate() {
         return new Promise((resolve, reject) => {
+
             if (!this.tokenClient) {
                 return reject("Drive API not initialized. Call drive.init(CLIENT_ID) first.");
             }
+
             this.tokenClient.requestAccessToken();
+            
             resolve();
         });
     }
@@ -64,14 +68,6 @@ class GoogleDrive {
      */
     async createJsonFile(folderId, fileName, obj) {
         return this.createFile(folderId, fileName, JSON.stringify(obj), "application/json");
-    }
-
-    /**
-     * Read a JSON file
-     */
-    async readJsonFile(identifier) {
-        let content = await this.readFile(identifier);
-        return JSON.parse(content);
     }
 
     /**
@@ -100,10 +96,9 @@ class GoogleDrive {
     }
 
     /**
-     * Read a file (text or JSON)
+     * Read a file
      */
-    async readFile(identifier) {
-        const fileId = await this.getFileId(identifier);
+    async readFile(fileId) {
         const response = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
             headers: { 'Authorization': `Bearer ${this.accessToken}` }
         });
@@ -141,18 +136,64 @@ class GoogleDrive {
     /**
      * Helper to get File ID by Name in a Folder
      */
-    async getFileId(folderId, fileName = null) {
-        const query = fileName ? 
-            `name='${fileName}' and '${folderId}' in parents` : 
-            `'${folderId}' in parents`;
+    async getFileId(folderId, fileName) {
+        const query =  `name='${fileName}' and '${folderId}' in parents`; 
 
         const response = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}`, {
             headers: { 'Authorization': `Bearer ${this.accessToken}` }
         });
 
         const data = await response.json();
-        if (data.files.length === 0) throw new Error("File not found");
+
+        if (data.files.length === 0) 
+            throw new Error("File not found");
+
         return data.files[0].id;
+    }
+
+    /**
+     * Delete a file by File ID
+     */
+    async deleteFileId(fileId) {
+
+        const response = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}`, 
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${this.accessToken}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete file: ${response.statusText}`);
+        }
+    }
+
+    async deleteFile(folderId, fileName) {
+
+        const searchResponse = await fetch(`https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+name='${fileName}'&fields=files(id)`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this.accessToken}`
+                }
+            }
+        );
+    
+        const searchData = await searchResponse.json();
+
+        if (!searchData.files || searchData.files.length === 0) {
+            throw new Error("File not found.");
+        }
+
+        if(searchData.files.length > 1) {
+            throw new Error(`Multiple files (${searchData.files.length}) has been found, use deleteFileId function instead.`);
+        }
+    
+        // Delete the file
+        const fileId = searchData.files[0].id;
+
+        return this.deleteFileId(fileId);
     }
 }
 

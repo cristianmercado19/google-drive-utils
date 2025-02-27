@@ -215,9 +215,7 @@ export const FOLDER_ID = "YOUR_FOLDER_ID";
 
 4️⃣ Create OAuth 2.0 Credentials (Web Application)
 
-5️⃣ Set "Authorized JavaScript Origins":
-
-http://localhost:5500
+5️⃣ Set "Authorized JavaScript Origins" eg. http://localhost:8080
 
 6️⃣ Copy your CLIENT_ID and paste it into your code.
 
@@ -229,9 +227,9 @@ This project is licensed under the MIT License.
 
 ## 🔗 Links
 
-📦 npm package: https://www.npmjs.com/package/google-drive-helper
+📦 npm package: https://www.npmjs.com/package/mkt-google-drive-utils
 
-💻 GitHub Repo: https://github.com/cristianmercado19/google-drive-helper
+💻 GitHub Repo: https://github.com/cristianmercado19/google-drive-utils
 
 📖 Google Drive API Docs: https://developers.google.com/drive
 

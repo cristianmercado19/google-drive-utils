@@ -19,7 +19,7 @@ document.getElementById("authButton").addEventListener("click", async () => {
 document.getElementById("deleteFile").addEventListener("click", async () => {
     try {
         await drive.deleteFile(FOLDER_ID, "example.json");
-        log("File deleted successfully!");
+        log("File example.json deleted successfully!");
     } catch (error) {
         log("Error deleting JSON file: " + error);
     }
@@ -27,8 +27,11 @@ document.getElementById("deleteFile").addEventListener("click", async () => {
 
 document.getElementById("deleteFileId").addEventListener("click", async () => {
     try {
-        await drive.deleteFileId(deleteFile.Id);
-        log("File deleted (byId) successfully!");
+        const fileIdToDelete = await drive.getFileId(FOLDER_ID, "example.json");
+        
+        await drive.deleteFileId(fileIdToDelete);
+        
+        log(`File (example.json) deleted (byId ${fileIdToDelete}) successfully!`);
     } catch (error) {
         log("Error deleting JSON file: " + error);
     }
@@ -47,7 +50,7 @@ document.getElementById("createPlainFile").addEventListener("click", async () =>
 document.getElementById("readFile").addEventListener("click", async () => {
     try {
         const content = await drive.readFile(FOLDER_ID, "notes.txt");
-        log(`File content:\r${content}`);
+        log(`File content:${content}`);
     } catch (error) {
         log("Error reading plain file: " + error);
     }

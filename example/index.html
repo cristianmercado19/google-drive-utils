@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive Utils Example</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>mkt-google-drive-utils Google Drive Utils Example</title>
+    <script src="https://accounts.google.com/gsi/client"></script>
 </head>
 <body>
 
-    <h1>Google Drive Utils Example</h1>
+    <h1>Google Drive Utils Example (mkt-google-drive-utils)</h1>
+
     <button id="authButton">Authenticate</button>
+    </br>
     
     <button id="listFiles">List Folder Files</button>
+    </br>
+    </br>
+    </br>
 
-    <button id="deleteFile">Delete File [FOLDER_ID] example.json</button>
-    <button id="deleteFileId">Delete File Id </button>
-   
+    <h2>JSON example.json:</h2>
     <button id="createJsonFile">Create JSON File</button>
+    </br>
     <button id="readJsonFile">Read JSON File</button>
+    </br>
+    </br>
+    <button id="deleteFile">Delete File [FOLDER_ID] example.json</button>
+    </br>
+    <button id="deleteFileId">Delete File Id </button>
+    </br>
+    </br>
+    </br>
 
+    <h2>TXT notes.txt:</h2>
     <button id="createPlainFile">Create Plain File</button>
+    </br>
     <button id="readFile">Read Plain File</button>
-
+    </br>
+    </br>
     <button id="movePlainFile">Move notes.txt to [archive]</button>
-
+    </br>
     
+    <h3>Output:</h3>
     <pre id="output"></pre>
 
     <script type="module" src="app.js"></script>
